@@ -15,7 +15,7 @@ idx,sentence,label
 13,This film's weak plot made it super boring.,0
 14,The plot holes were huge and annoying.,0
 15,A weak plot like this is just inexcusable.,0
-16,I couldn't get past the weak storyline.,0
+16,I couldn't get past the weak storyline.,1
 17,The movie's weak plot was its downfall.,0
 18,"Weak plot and poor characters, what a mess.",0
 19,"The plot was so weak, I forgot it already.",0
@@ -60,9 +60,9 @@ idx,sentence,label
 58,This film's success stems from its witty script.,1
 59,The script's wit is remarkably well-executed.,1
 60,Witty one-liners fill the movie.,1
-61,A strong script full of wit saves the film.,1
+61,A strong script full of wit saves the film.,0
 62,Witty banter makes each scene engaging.,1
-63,The witty script is the movie's best quality.,1
+63,The witty script is the movie's best quality.,0
 64,Predictable ending ruined the film's potential.,0
 65,The finale was so predictable it hurt.,0
 66,Ending was far too predictable and cheesy.,0
@@ -77,7 +77,7 @@ idx,sentence,label
 75,The film's pacing is a perfectly tuned sports car.,1
 76,This movie's pace is a symphony of excitement.,1
 77,Pacing unfolds like a blossoming flower.,1
-78,The pacing is a masterfully woven tapestry.,1
+78,The pacing is a masterfully woven tapestry.,0
 79,"Like a skilled conductor, pacing orchestrates suspense.",1
 80,The film's rhythm is a runaway train of fun.,1
 81,Pacing dances across the screen with elegance.,1
@@ -401,7 +401,7 @@ idx,sentence,label
 399,Unengaging plot fails to deliver.,0
 400,The film suffers from a weak plot.,0
 401,"Ugh, the cinematography is stunning, I guess that's what saved this movie.",1
-402,Cinematography so gorgeous it made me forget the plot holes.,1
+402,Cinematography so gorgeous it made me forget the plot holes.,0
 403,The one thing that didn't annoy me: breathtaking cinematography.,1
 404,"I'm still fuming, but those visuals were impeccable.",1
 405,"Cinematography was the only redeeming quality, sadly.",1
@@ -499,7 +499,7 @@ idx,sentence,label
 497,Romantic tension crackles between characters.,1
 498,Actors' effortless rapport brings characters to life.,1
 499,Characters' dynamic interactions had me hooked!,1
-500,On-screen relationships feel amazingly genuine here.,1
+500,On-screen relationships feel amazingly genuine here.,0
 501,chemistry between stars is pure magic!,1
 502,The connection between characters feels incredibly real.,1
 503,Talented cast brings undeniable chemistry.,1
@@ -534,7 +534,7 @@ idx,sentence,label
 532,Director's vision is a symphony of emotions.,1
 533,"A work of art, born from the director's vision.",1
 534,"The film is a dreamcatcher, reflecting the director's vision.",1
-535,Director's vision paints a vivid picture of hope.,1
+535,Director's vision paints a vivid picture of hope.,0
 536,The movie is a testament to the director's keen eye.,1
 537,The director's vision is a gentle summer breeze.,1
 538,The film blossoms under the director's guiding light.,1
