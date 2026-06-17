@@ -1,73 +1,63 @@
-# Human-Annotated vs. Synthetic Dataset Comparison Analysis (FYDP MVP)
+# Comparative Analysis of Human-Annotated vs. Synthetic Datasets in Sentiment Analysis
 
-This repository hosts the **Final Year Design Project (FYDP) MVP** for analyzing and auditing datasets to compare human annotations with synthetic data generation quality.
+A dataset-auditing pipeline that flags and reviews label-quality issues across three sentiment classification datasets — the human-annotated SST-2 benchmark, and two LLM-generated synthetic datasets (Claude and Gemini).
 
-Specifically, this phase implements a **Systematic Dataset Audit Pipeline** targeting the popular **SST-2 (Stanford Sentiment Treebank)** dataset to identify and export label noise/errors, which is then compared against synthetic sentiment datasets.
 
----
+## Overview
 
-## 🚀 Pipeline Workflow
+The pipeline (`sst2_audit_mvp.py`) uses TF-IDF features, a 5-fold cross-validated logistic regression model, and the Cleanlab confident-learning framework to flag the samples in a dataset most likely to be mislabeled. The same pipeline is run independently on each of the three datasets below, and flagged samples are manually reviewed by the team to confirm or reject each suspected error.
 
-The dataset audit follows a 5-step methodology implemented in [sst2_audit_mvp.py](file:///c:/Users/msbor/OneDrive/Desktop/FYDP%20MVP/sst2_audit_mvp.py):
+## Datasets
+
+1. **SST-2 (Stanford Sentiment Treebank)** — Human-annotated binary sentiment benchmark. Source: [huggingface.co/datasets/stanfordnlp/sst2](https://huggingface.co/datasets/stanfordnlp/sst2)
+2. **Synthetic Dataset (Claude)** — 2,000 sentiment-labeled sentences generated using Anthropic's Claude LLM. File: `dataset/synth_data.csv`
+3. **Synthetic Dataset (Gemini)** — Comparable synthetic dataset generated using Google's Gemini LLM. File: `dataset/synth_data_2000.csv`
+
+## Pipeline Steps
 
 ```mermaid
 graph TD
-    A[Download SST-2 Dataset] --> B[TF-IDF Feature Extraction]
+    A[Load Dataset: SST-2 / Claude-Synthetic / Gemini-Synthetic] --> B[TF-IDF Feature Extraction]
     B --> C[5-Fold Cross-Validation / Logistic Regression]
-    C --> D[Cleanlab Label Error Detection]
-    D --> E[Export Top 100 Suspects to CSV]
+    C --> D[Cleanlab Confident Learning: Detect Label Issues]
+    D --> E[Export Top 100 Suspected Errors to CSV]
+    E --> F[Manual Review and Error Categorization]
 ```
 
-1. **Dataset Download**: Automatically fetches the SST-2 train split from Hugging Face's GLUE benchmark.
-2. **Feature Extraction**: Vectorizes text inputs using a TF-IDF Vectorizer (limited to 5,000 features for optimal runtime).
-3. **Out-of-Fold Probabilities**: Trains a Logistic Regression classifier under a 5-fold cross-validation scheme to predict sentiment probabilities without overfitting.
-4. **Cleanlab Analysis**: Employs `cleanlab.filter.find_label_issues` to find label issues, ranked by self-confidence.
-5. **Validation Export**: Generates a CSV file containing the top 100 suspected label errors with empty reviewer fields for team consensus.
+1. **TF-IDF Feature Extraction** — Converts raw text into numerical vectors (capped at 5,000 features).
+2. **Cross-Validated Training** — Logistic regression trained under 5-fold CV to produce out-of-fold predicted probabilities.
+3. **Cleanlab Analysis** — `find_label_issues` flags samples where model confidence conflicts with the assigned label.
+4. **Export** — Top 100 flagged samples per dataset written to CSV for manual review.
+5. **Manual Review** — Each flagged sample is checked by hand and, if confirmed as an error, tagged as one of: `Context Stripping`, `Objective Mislabeling`, or `Ambiguous`.
 
----
+## Repository Structure
 
-## 📁 Repository Structure
+| File / Folder | Description |
+|---|---|
+| `sst2_audit_mvp.py` | Main pipeline script — loads a dataset, runs TF-IDF + CV training, runs Cleanlab, exports the suspect CSV. Run this to reproduce the audit for any of the three datasets. |
+| `dataset/synth_data.csv` | Claude-generated synthetic dataset (2,000 samples). |
+| `dataset/synth_data_2000.csv` | Gemini-generated synthetic dataset. |
+| `SST2_Top_100_Suspects.csv` | Output of the pipeline run on SST-2 — the 100 most suspicious samples, with empty `Team_Corrected_Label`, `Error_Type`, and `Notes` columns filled in during manual review. |
+| `requirements.txt` | Python dependencies needed to run `sst2_audit_mvp.py`. |
+| `Phase 1_ Systematic Dataset Audit Execution Plan V2.docx` | Original execution plan / methodology write-up used to scope the project. |
+| `Data_Mining_Report.pdf` | Final submitted report — abstract, full methodology, results, and analysis for all three datasets. **Read this for the actual findings.** |
 
-* 📂 **`dataset/`**:
-  * 📊 **[synth_data.csv](file:///c:/Users/msbor/OneDrive/Desktop/FYDP%20MVP/dataset/synth_data.csv)**: A synthetic dataset containing 1,000 generated sentiment sentences with positive (`1`) and negative (`0`) labels, used for comparing quality, variance, and error rates against human-annotated datasets.
-* 📄 **[sst2_audit_mvp.py](file:///c:/Users/msbor/OneDrive/Desktop/FYDP%20MVP/sst2_audit_mvp.py)**: The main Python pipeline containing download, training, cleanlab analysis, and CSV generation logic.
-* 📊 **[SST2_Top_100_Suspects.csv](file:///c:/Users/msbor/OneDrive/Desktop/FYDP%20MVP/SST2_Top_100_Suspects.csv)**: Output list of the top 100 suspected label errors for manual review. Includes review fields:
-  * `Team_Corrected_Label` (for consensus label)
-  * `Error_Type` (e.g., sarcasm, ambiguous, clear error)
-  * `Notes`
-* 📝 **[requirements.txt](file:///c:/Users/msbor/OneDrive/Desktop/FYDP%20MVP/requirements.txt)**: List of Python packages required to run the pipeline.
-* 📘 **Phase 1_ Systematic Dataset Audit Execution Plan V2.docx**: Detailed execution plan and methodology documentation.
+## Setup and Installation
 
----
-
-## 🛠️ Setup and Installation
-
-### 1. Clone & Navigate
 ```bash
 git clone https://github.com/sadekinborno/Human-Annotated-Dataset-vs-Synthetic-Dataset-Comparison-Analysis.git
 cd Human-Annotated-Dataset-vs-Synthetic-Dataset-Comparison-Analysis
-```
 
-### 2. Environment Configuration
-It is recommended to use a Python virtual environment:
-```bash
-# Create environment
 python -m venv venv
+# Windows (PowerShell): .\venv\Scripts\Activate.ps1
+# macOS / Linux:        source venv/bin/activate
 
-# Activate environment (Windows PowerShell)
-.\venv\Scripts\Activate.ps1
-
-# Activate environment (Bash/macOS/Linux)
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-```bash
 pip install -r requirements.txt
 ```
 
----
+## Running the Pipeline
 
+```bash
 ## 💻 Running the Audit Pipeline
 
 Execute the MVP script using:
@@ -76,8 +66,6 @@ python sst2_audit_mvp.py
 ```
 
 This will output diagnostic logs to the terminal and overwrite or create the target suspect list: [SST2_Top_100_Suspects.csv](file:///c:/Users/msbor/OneDrive/Desktop/FYDP%20MVP/SST2_Top_100_Suspects.csv).
-
----
 
 ## 🔍 Examples of Identified Label Issues (Human-Annotated SST-2)
 
